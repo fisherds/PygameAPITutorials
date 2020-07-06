@@ -88,15 +88,26 @@ class Cloud:
 
 def main():
     """ Main game loop that creates the sprite objects, controls interactions, and draw the screen. """
-    # TODO 1: Initialize the game, display a caption, and set   screen   to a 1000x600 Screen.
+    # DONE 1: Initialize the game, display a caption, and set   screen   to a 1000x600 Screen.
+    pygame.init()
+    pygame.display.set_caption("Mike's Rainy Day")
+    screen = pygame.display.set_mode((1000, 600))  # Don't forget to save off the screen!
 
-    # TODO 2: Make a Clock
+    # DONE 2: Make a Clock
+    clock = pygame.time.Clock()
+
     # TODO 7: As a temporary test, make a new Raindrop called test_drop at x=320 y=10
     # TODO 15: Make a Hero, named mike, with appropriate images, starting at position x=300 y=400.
     # TODO 23: Make a Cloud, named cloud, with appropriate images, starting at position x=300 y=50.
 
-    # TODO 3: Enter the game loop, with a clock tick of 60 (or so) at each iteration.
-        # TODO 4:   Make the pygame.QUIT event stop the game.
+    # DONE 3: Enter the game loop, with a clock tick of 60 (or so) at each iteration.
+        # DONE 4:   Make the pygame.QUIT event stop the game.
+    while True:
+        clock.tick(60)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+
 
         # TODO 27: Inside the game loop (AFTER the events loop above), get the list of keys that are currently pressed.
         # TODO    Arrange so that the Cloud moves:
@@ -107,7 +118,8 @@ def main():
         # DISCUSS: If you want something to happen once per key press, put it in the events loop above
         #          If you want something to continually happen while holding the key, put it after the events loop.
 
-        # TODO 5: Inside the game loop, draw the screen (fill with white)
+        # DONE 5: Inside the game loop, draw the screen (fill with white)
+        screen.fill((255, 255, 255))
 
         # TODO 12: As a temporary test, move test_drop
         # TODO 14: As a temporary test, check if test_drop is off screen, if so reset the y position to 10
@@ -128,8 +140,9 @@ def main():
 
         # TODO 18: Draw the Hero
 
-        # TODO 6: Update the display and remove the pass statement below
-    pass
+        # DONE 6: Update the display and remove the pass statement below
+        pygame.display.update()
 
 
-# TODO: Call main.
+
+main()

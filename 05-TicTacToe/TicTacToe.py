@@ -44,15 +44,31 @@ class Game:
 
     def take_turn(self, row, col):
         """Handle the current turn of the player and update board array"""
-        # TODO 8: Check if game_is_over and return from this method (doing nothing) if True
-        # TODO 9: Check if the value for row and col are valid.  Return (doing nothing) if invalid.
-        # TODO 10: Check if the mark at the requested row col is ".".  Return (doing nothing) if it is not "."
+        # Done 8: Check if game_is_over and return from this method (doing nothing) if True
+        # Done 9: Check if the value for row and col are valid.  Return (doing nothing) if invalid.
+        # Done 10: Check if the mark at the requested row col is ".".  Return (doing nothing) if it is not "."
+        if self.game_is_over:
+            print("The game is over")
+            return
+        if row < 0 or row > 2 or col < 0 or col > 2:
+            print("Invalid row col")
+            return
+        if self.board[row][col] != ".":
+            print("Location not empty")
+            return
 
-        # TODO 11: Determine if it is X's turn or O's turn (even turn_counter means X's turn, odd for O's turn)
+        # Done 11: Determine if it is X's turn or O's turn (even turn_counter means X's turn, odd for O's turn)
         #     - Modify the board by setting the current row col to an "X" or an "O" as appropriate
         #     - Update the game_state_string as appropriate "O's Turn" or "X's Turn"
+        if self.turn_counter % 2 == 0:
+            self.board[row][col] = "X"
+            self.game_state_string = "O's Turn"
+        else:
+            self.board[row][col] = "O"
+            self.game_state_string = "X's Turn"
 
-        # TODO 12: Increment the turn_counter
+        # Done 12: Increment the turn_counter
+        self.turn_counter += 1
 
         self.check_for_game_over()
 
@@ -121,6 +137,16 @@ def main():
 
     # Done 6: Write test code as needed to develop your model object.
     print(view_controller.game)   # TODO: Delete all these tests later!
+    view_controller.game.take_turn(1, 1)  # X in the middle
+    print(view_controller.game)
+    view_controller.game.take_turn(0, 2)  # O in the top right
+    print(view_controller.game)
+    view_controller.game.take_turn(0, 0)  # X in the top left
+    print(view_controller.game)
+    view_controller.game.take_turn(1, 2)  # O in the right middle
+    print(view_controller.game)
+    view_controller.game.take_turn(2, 2)  # X wins!
+    print(view_controller.game)
 
 
     while True:

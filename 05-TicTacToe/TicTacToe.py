@@ -119,12 +119,23 @@ class ViewController(object):
 
     def draw(self):
         """ Draw the board based on the marked store in the board configuration array """
-        # TODO 13: Blit the board_image onto the screen at the x y position of row=0 col=0
-        # TODO 14: Use a nested loop (via range) to go over all marks of the game.board
+        # Done 13: Blit the board_image onto the screen at the x y position of row=0 col=0
+        self.screen.blit(self.board_image, get_xy_position(0, 0))
+        # Done 14: Use a nested loop (via range) to go over all marks of the game.board
         #    If the mark is "X", blit an X image at the x y position of row col
         #    If the mark is "O", blit an O image at the x y position of row col
-        # TODO 15: Update the display caption to be the game.game_state_string
-        pass
+
+        for row in range(3):
+            for col in range(3):
+                mark = self.game.board[row][col]
+                if mark == "X":
+                    self.screen.blit(self.x_image, get_xy_position(row, col))
+                if mark == "O":
+                    self.screen.blit(self.o_image, get_xy_position(row, col))
+
+        # Done 15: Update the display caption to be the game.game_state_string
+        pygame.display.set_caption(self.game.game_state_string)
+
 
 # --------------------------- Controller ---------------------------
 
@@ -136,18 +147,17 @@ def main():
     view_controller = ViewController(screen)
 
     # Done 6: Write test code as needed to develop your model object.
-    print(view_controller.game)   # TODO: Delete all these tests later!
-    view_controller.game.take_turn(1, 1)  # X in the middle
-    print(view_controller.game)
-    view_controller.game.take_turn(0, 2)  # O in the top right
-    print(view_controller.game)
-    view_controller.game.take_turn(0, 0)  # X in the top left
-    print(view_controller.game)
-    view_controller.game.take_turn(1, 2)  # O in the right middle
-    print(view_controller.game)
-    view_controller.game.take_turn(2, 2)  # X wins!
-    print(view_controller.game)
-
+    # print(view_controller.game)   # TODO: Delete all these tests later!
+    # view_controller.game.take_turn(1, 1)  # X in the middle
+    # print(view_controller.game)
+    # view_controller.game.take_turn(0, 2)  # O in the top right
+    # print(view_controller.game)
+    # view_controller.game.take_turn(0, 0)  # X in the top left
+    # print(view_controller.game)
+    # view_controller.game.take_turn(1, 2)  # O in the right middle
+    # print(view_controller.game)
+    # view_controller.game.take_turn(2, 2)  # X wins!
+    # print(view_controller.game)
 
     while True:
         for event in pygame.event.get():

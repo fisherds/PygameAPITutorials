@@ -104,6 +104,18 @@ class EnemyFleet:
                 del self.badguys[k]
 
 
+class Scoreboard:
+    def __init__(self, screen):
+        self.screen = screen
+        self.score = 0
+        self.font = pygame.font.Font(None, 30)
+
+    def draw(self):
+        score_string = "Score: {}".format(self.score)
+        score_image = self.font.render(score_string, True, (255, 255, 255))
+        self.screen.blit(score_image, (5, 5))
+
+
 def main():
     pygame.init()
     clock = pygame.time.Clock()
@@ -115,6 +127,7 @@ def main():
     enemy_fleet = EnemyFleet(screen, enemy_rows)
     fighter = Fighter(screen, screen.get_width() // 2 - 50, screen.get_height() - 60)
     game_over_image = pygame.image.load("gameover.png")
+    scoreboard = Scoreboard(screen)
 
     while True:
         clock.tick(60)
@@ -132,6 +145,8 @@ def main():
         for missile in fighter.missiles:
             missile.draw()
 
+        scoreboard.draw()
+        
         if is_game_over:
             screen.blit(game_over_image, (170, 200))
             pygame.display.update()
@@ -144,9 +159,9 @@ def main():
         if pressed_keys[pygame.K_RIGHT] and fighter.x < screen.get_width() - fighter.image.get_width() / 2:
             fighter.x += 5
 
-        # Use the Supergun!!!!  -- TODO: Remove this later.
-        if pressed_keys[pygame.K_SPACE]:
-            fighter.fire()
+        # Use the Supergun!!!!
+        # if pressed_keys[pygame.K_SPACE]:
+        #     fighter.fire()
 
         # Movements stay AFTER the game over.
         enemy_fleet.move()
@@ -157,7 +172,7 @@ def main():
         for badguy in enemy_fleet.badguys:
             for missile in fighter.missiles:
                 if badguy.hit_by(missile):
-                    # Consider later: Increment the score.  Play a sound
+                    scoreboard.score += 100
                     badguy.is_dead = True
                     missile.has_exploded = True
 
@@ -168,20 +183,11 @@ def main():
             enemy_rows += 1
             enemy_fleet = EnemyFleet(screen, enemy_rows)
 
-        # TODO 22: Check for your death.  Figure out what needs to happen.
-        # Hints: Check if a Badguy gets a y value greater than 545
-        #    If that happens set a variable (game_over) as appropriate
-        #    If the game is over, show the gameover.png image at (170, 200)
         for badguy in enemy_fleet.badguys:
             if badguy.y > screen.get_height() - fighter.image.get_height() - badguy.image.get_height():
                 is_game_over = True
 
 
-        # TODO 23: Create a Scoreboard class (from scratch)
-        # Hints: Instance variables: screen, score, and font (size 30)
-        #    Methods: draw (and __init__)
-        # Create a scoreboard and draw it at location 5, 5
-        # When a Badguy is killed add 100 points to the scoreboard.score
 
         # TODO 24: Optional extra - Add sound effects!
 

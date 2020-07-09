@@ -48,19 +48,25 @@ class Fighter:
 
 class Badguy:
     def __init__(self, screen, x, y, speed):
-        # Store the given arguments as instance variables with the same name.
-        # Set   is_dead to False   and   original_x to x   and move_right to True.
-        # Load the file  "badguy.png"  as the image. and set its colorkey to black.
-        pass
+        self.screen = screen
+        self.x = x
+        self.original_x = x
+        self.y = y
+        self.speed = speed * 1.5
+        self.is_dead = False
+        self.image = pygame.image.load("badguy.png")
 
     def move(self):
         # Move 2 units in the current direction.
         # Switch direction if this Badguy's position is more than 100 pixels from its original position.
-        pass
+        self.x += self.speed
+        if abs(self.x - self.original_x) > 100:
+            self.speed = -self.speed
+            self.y += 4 * abs(self.speed)
 
     def draw(self):
         # Draw this Badguy, using its image at its current (x, y) position.
-        pass
+        self.screen.blit(self.image, (self.x, self.y))
 
     def hit_by(self, missile):
         # Make a Badguy hitbox rect.
@@ -84,11 +90,13 @@ class EnemyFleet:
 
     def move(self):
         # Make each badguy in this EnemyFleet move.
-        pass
+        for badguy in self.badguys:
+            badguy.move()
 
     def draw(self):
         # Make each badguy in this EnemyFleet draw itself.
-        pass
+        for badguy in self.badguys:
+            badguy.draw()
 
     def remove_dead_badguys(self):
         for k in range(len(self.badguys) - 1, -1, -1):
@@ -102,16 +110,14 @@ def main():
     pygame.display.set_caption("SPACE INVADERS!")
     screen = pygame.display.set_mode((640, 650))
 
-    # TODO 9: Set    enemy_rows    to an initial value of 3.
-    # TODO 10: Create an EnemyFleet object (called enemy_fleet) with the screen and enemy_rows
-
+    enemy_rows = 3
+    enemy_fleet = EnemyFleet(screen, enemy_rows)
     fighter = Fighter(screen, screen.get_width() // 2 - 50, screen.get_height() - 60)
 
     while True:
         clock.tick(60)
         for event in pygame.event.get():
             pressed_keys = pygame.key.get_pressed()
-            # Done 5: If the event type is KEYDOWN and pressed_keys[pygame.K_SPACE] is True, then fire a missile
             if event.type == pygame.KEYDOWN and pressed_keys[pygame.K_SPACE]:
                 fighter.fire()
             if event.type == pygame.QUIT:
@@ -128,12 +134,9 @@ def main():
 
         fighter.draw()
 
-        # TODO 11: Move the enemy_fleet
-        # TODO 12: Draw the enemy_fleet
+        enemy_fleet.move()
+        enemy_fleet.draw()
 
-        # Done 6: For each missile in the fighter missiles
-        #   Done 7: Move the missile
-        #   Done 8: Draw the missile
         for missile in fighter.missiles:
             missile.move()
             missile.draw()

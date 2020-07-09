@@ -18,15 +18,16 @@ class Missile:
 
 class Fighter:
     def __init__(self, screen, x, y):
-        # Store the data.
-        # Set   self.missiles   to the empty list.
-        # Load the file  "fighter.png"  as the image
-        # Set the colorkey to white (it has a white background that needs removed)
-        pass
+        self.screen = screen
+        self.x = x
+        self.y = y
+        self.image = pygame.image.load("fighter.png")
+        self.image.set_colorkey((255, 255, 255))
+        self.missiles = []
 
     def draw(self):
         # Draw this Fighter, using its image at its current (x, y) position.
-        pass
+        self.screen.blit(self.image, (self.x, self.y))
 
     def fire(self):
         # Construct a new Missile 50 pixels to the right of this Fighter.
@@ -98,7 +99,8 @@ def main():
 
     # TODO 9: Set    enemy_rows    to an initial value of 3.
     # TODO 10: Create an EnemyFleet object (called enemy_fleet) with the screen and enemy_rows
-    # TODO 1: Create a Fighter (called fighter) at location  320, 590
+    
+    fighter = Fighter(screen, screen.get_width() // 2 - 50, screen.get_height() - 60)
 
     while True:
         clock.tick(60)
@@ -109,10 +111,15 @@ def main():
                 sys.exit()
 
         screen.fill((0, 0, 0))
+
+        # Move the Fighter
         pressed_keys = pygame.key.get_pressed()
-        # TODO 3: If pygame.K_LEFT is pressed and fighter.x is greater than -50 move the fighter left 5
-        # TODO 4: If pygame.K_RIGHT is pressed and fighter.x is less than 590 move the fighter right 5
-        # TODO 2: Draw the fighter
+        if pressed_keys[pygame.K_LEFT] and fighter.x > -fighter.image.get_width() / 2:
+            fighter.x -= 5
+        if pressed_keys[pygame.K_RIGHT] and fighter.x < screen.get_width() - fighter.image.get_width() / 2:
+            fighter.x += 5
+
+        fighter.draw()
 
         # TODO 11: Move the enemy_fleet
         # TODO 12: Draw the enemy_fleet

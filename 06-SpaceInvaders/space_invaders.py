@@ -110,9 +110,11 @@ def main():
     pygame.display.set_caption("SPACE INVADERS!")
     screen = pygame.display.set_mode((640, 650))
 
+    is_game_over = False
     enemy_rows = 4
     enemy_fleet = EnemyFleet(screen, enemy_rows)
     fighter = Fighter(screen, screen.get_width() // 2 - 50, screen.get_height() - 60)
+    game_over_image = pygame.image.load("gameover.png")
 
     while True:
         clock.tick(60)
@@ -124,6 +126,16 @@ def main():
                 sys.exit()
 
         screen.fill((0, 0, 0))
+        # Do some draw before Game over.
+        fighter.draw()
+        enemy_fleet.draw()
+        for missile in fighter.missiles:
+            missile.draw()
+
+        if is_game_over:
+            screen.blit(game_over_image, (170, 200))
+            pygame.display.update()
+            continue
 
         # Move the Fighter
         pressed_keys = pygame.key.get_pressed()
@@ -136,14 +148,11 @@ def main():
         if pressed_keys[pygame.K_SPACE]:
             fighter.fire()
 
-        fighter.draw()
-
+        # Movements stay AFTER the game over.
         enemy_fleet.move()
-        enemy_fleet.draw()
 
         for missile in fighter.missiles:
             missile.move()
-            missile.draw()
 
         for badguy in enemy_fleet.badguys:
             for missile in fighter.missiles:
@@ -163,6 +172,10 @@ def main():
         # Hints: Check if a Badguy gets a y value greater than 545
         #    If that happens set a variable (game_over) as appropriate
         #    If the game is over, show the gameover.png image at (170, 200)
+        for badguy in enemy_fleet.badguys:
+            if badguy.y > screen.get_height() - fighter.image.get_height() - badguy.image.get_height():
+                is_game_over = True
+
 
         # TODO 23: Create a Scoreboard class (from scratch)
         # Hints: Instance variables: screen, score, and font (size 30)

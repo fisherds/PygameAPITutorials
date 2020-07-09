@@ -2,18 +2,21 @@ import pygame, sys
 
 
 class Missile:
-    def __init__(self, screen, x):
+    def __init__(self, screen, x, y):
         # Store the data.  Initialize:   y to 591   and   has_exploded to False.
-        pass
+        self.screen = screen
+        self.x = x
+        self.y = y
+        self.has_exploded = False
 
     def move(self):
         # Make self.y 5 smaller than it was (which will cause the Missile to move UP).
-        pass
+        self.y -= 5
 
     def draw(self):
         # Draw a vertical, 4 pixels thick, 8 pixels long, red (or green) line on the screen,
         # where the line starts at the current position of this Missile.
-        pass
+        pygame.draw.line(self.screen, (0, 255, 0), (self.x, self.y), (self.x, self.y + 8), 4)
 
 
 class Fighter:
@@ -32,7 +35,9 @@ class Fighter:
     def fire(self):
         # Construct a new Missile 50 pixels to the right of this Fighter.
         # Append that Missile to this Fighter's list of Missile objects.
-        pass
+        new_missile = Missile(self.screen, self.x + self.image.get_width() // 2,
+                              self.screen.get_height() - self.image.get_height() + 1)
+        self.missiles.append(new_missile)
 
     def remove_exploded_missiles(self):
         # Already complete
@@ -99,14 +104,16 @@ def main():
 
     # TODO 9: Set    enemy_rows    to an initial value of 3.
     # TODO 10: Create an EnemyFleet object (called enemy_fleet) with the screen and enemy_rows
-    
+
     fighter = Fighter(screen, screen.get_width() // 2 - 50, screen.get_height() - 60)
 
     while True:
         clock.tick(60)
         for event in pygame.event.get():
             pressed_keys = pygame.key.get_pressed()
-            # TODO 5: If the event type is KEYDOWN and pressed_keys[pygame.K_SPACE] is True, then fire a missile
+            # Done 5: If the event type is KEYDOWN and pressed_keys[pygame.K_SPACE] is True, then fire a missile
+            if event.type == pygame.KEYDOWN and pressed_keys[pygame.K_SPACE]:
+                fighter.fire()
             if event.type == pygame.QUIT:
                 sys.exit()
 
@@ -124,9 +131,12 @@ def main():
         # TODO 11: Move the enemy_fleet
         # TODO 12: Draw the enemy_fleet
 
-        # TODO 6: For each missile in the fighter missiles
-        #   TODO 7: Move the missile
-        #   TODO 8: Draw the missile
+        # Done 6: For each missile in the fighter missiles
+        #   Done 7: Move the missile
+        #   Done 8: Draw the missile
+        for missile in fighter.missiles:
+            missile.move()
+            missile.draw()
 
         # TODO 12: For each badguy in the enemy_fleet.badguys list
         #     TODO 13: For each missile in the fighter missiles

@@ -86,7 +86,7 @@ class EnemyFleet:
     def is_defeated(self):
         # Return True if the number of badguys in this Enemy Fleet is 0,
         # otherwise return False.
-        pass
+        return len(self.badguys) == 0
 
     def move(self):
         # Make each badguy in this EnemyFleet move.
@@ -110,7 +110,7 @@ def main():
     pygame.display.set_caption("SPACE INVADERS!")
     screen = pygame.display.set_mode((640, 650))
 
-    enemy_rows = 3
+    enemy_rows = 4
     enemy_fleet = EnemyFleet(screen, enemy_rows)
     fighter = Fighter(screen, screen.get_width() // 2 - 50, screen.get_height() - 60)
 
@@ -132,6 +132,10 @@ def main():
         if pressed_keys[pygame.K_RIGHT] and fighter.x < screen.get_width() - fighter.image.get_width() / 2:
             fighter.x += 5
 
+        # Use the Supergun!!!!  -- TODO: Remove this later.
+        if pressed_keys[pygame.K_SPACE]:
+            fighter.fire()
+
         fighter.draw()
 
         enemy_fleet.move()
@@ -151,9 +155,9 @@ def main():
         fighter.remove_exploded_missiles()
         enemy_fleet.remove_dead_badguys()
 
-        # TODO 19: If the enemy is_defeated
-        #     TODO 20: Increment the enemy_rows
-        #     TODO 21: Create a new enemy_fleet with the screen and enemy_rows
+        if enemy_fleet.is_defeated:
+            enemy_rows += 1
+            enemy_fleet = EnemyFleet(screen, enemy_rows)
 
         # TODO 22: Check for your death.  Figure out what needs to happen.
         # Hints: Check if a Badguy gets a y value greater than 545
